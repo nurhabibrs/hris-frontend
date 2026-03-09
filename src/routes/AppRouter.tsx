@@ -6,21 +6,21 @@ import { useAuthStore } from "../store/authStore"
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const token = useAuthStore((state) => state.token)
-  return token ? <>{children}</> : <Navigate to="/" replace />
+  return token ? <>{children}</> : <Navigate to="/login" replace />
 }
 
 function PublicRoute({ children }: { children: React.ReactNode }) {
   const token = useAuthStore((state) => state.token)
-  return token ? <Navigate to="/attendance" replace /> : <>{children}</>
+  return token ? <Navigate to="/" replace /> : <>{children}</>
 }
 
 export default function AppRouter() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<PublicRoute><LoginPage /></PublicRoute>} />
+        <Route path="/login" element={<PublicRoute><LoginPage /></PublicRoute>} />
         <Route
-          path="/attendance"
+          path="/"
           element={
             <ProtectedRoute>
               <AttendancePage />

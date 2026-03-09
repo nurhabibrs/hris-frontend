@@ -12,7 +12,7 @@ export default function LoginPage() {
   const handleLogin = async () => {
     try {
         await login(email, password)
-        navigate("/attendance")
+        navigate("/")
     } catch (error) {
         console.error("Login failed:", error)
     }
