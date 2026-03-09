@@ -28,11 +28,6 @@ const Navbar = ({ tabs, activeTab, onTabChange }: NavbarProps) => {
     navigate("/login");
   };
 
-  const handleHistory = () => {
-    setShowDropdown(false);
-    navigate("/history");
-  };
-
   const handleSetting = () => {
     setShowDropdown(false);
     navigate("/settings");
@@ -87,16 +82,6 @@ const Navbar = ({ tabs, activeTab, onTabChange }: NavbarProps) => {
                   <p className="text-sm font-semibold text-slate-900 truncate">{user?.name ?? "User"}</p>
                   <p className="text-xs text-slate-500 truncate">{user?.email ?? ""}</p>
                 </div>
-
-                <button
-                  onClick={handleHistory}
-                  className="w-full px-4 py-2 text-left text-sm text-slate-700 hover:bg-slate-100 transition-colors flex items-center gap-2"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  History
-                </button>
 
                 <button
                   onClick={handleSetting}
