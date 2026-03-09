@@ -1,14 +1,21 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import { useAuthStore } from "../store/authStore"
 
 export default function LoginPage() {
   const login = useAuthStore((state) => state.login)
+  const navigate = useNavigate()
 
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
   const handleLogin = async () => {
-    await login(email, password)
+    try {
+        await login(email, password)
+        navigate("/attendance")
+    } catch (error) {
+        console.error("Login failed:", error)
+    }
   }
 
   return (
