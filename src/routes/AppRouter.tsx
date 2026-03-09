@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
 
 import LoginPage from "../pages/LoginPage"
-import AttendancePage from "../pages/AttendancePage"
+import DashboardPage from "../pages/DashboardPage"
 import { useAuthStore } from "../store/authStore"
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
@@ -23,7 +23,7 @@ export default function AppRouter() {
           path="/"
           element={
             <ProtectedRoute>
-              <AttendancePage />
+              <DashboardPage />
             </ProtectedRoute>
           }
         />
