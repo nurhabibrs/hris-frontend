@@ -89,19 +89,21 @@ function SummaryTab() {
   const { attendances, meta, fetchSummary } = useAttendanceStore();
   const [filterStatus, setFilterStatus] = useState<"all" | "late" | "ontime">("all");
   const [order, setOrder] = useState<"asc" | "desc">("desc");
+  const [limit, setLimit] = useState(10);
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [page, setPage] = useState(1);
 
   useEffect(() => {
-    const filters: { startDate?: string; endDate?: string; isLate?: boolean; page: number; order?: "asc" | "desc" } = { page }
+    const filters: { startDate?: string; endDate?: string; isLate?: boolean; page: number; limit?: number; order?: "asc" | "desc" } = { page }
     if (startDate) filters.startDate = startDate
     if (endDate) filters.endDate = endDate
     if (filterStatus === "late") filters.isLate = true
     else if (filterStatus === "ontime") filters.isLate = false
     if (order) filters.order = order
+    if (limit) filters.limit = limit
     fetchSummary(filters);
-  }, [fetchSummary, startDate, endDate, filterStatus, order, page]);
+  }, [fetchSummary, startDate, endDate, filterStatus, order, limit, page]);
 
   const handleReset = () => {
     setPage(1);
@@ -109,6 +111,7 @@ function SummaryTab() {
     setStartDate("");
     setEndDate("");
     setOrder("desc");
+    setLimit(10);
   };
 
   const filtered = attendances;
@@ -205,9 +208,22 @@ function SummaryTab() {
       )}
       {meta && (
         <div className="px-4 sm:px-6 py-4 border-t border-slate-100 flex flex-col sm:flex-row items-center gap-3 justify-between">
-          <p className="text-sm text-slate-500">
-            Menampilkan {attendances.length} dari {meta.total} data
-          </p>
+          <div className="flex items-center gap-2">
+            <p className="text-sm text-slate-500">
+              Menampilkan {attendances.length} dari {meta.total} data
+            </p>
+            <select
+              value={limit}
+              onChange={(e) => { setLimit(Number(e.target.value)); setPage(1); }}
+              className="text-sm border border-slate-200 rounded-lg px-2 py-1.5 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value={5}>5</option>
+              <option value={10}>10</option>
+              <option value={25}>25</option>
+              <option value={50}>50</option>
+              <option value={100}>100</option>
+            </select>
+          </div>
           <div className="flex items-center gap-1">
             <button
               onClick={() => setPage((p) => Math.max(1, p - 1))}
