@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { useAttendanceStore } from "../store/attendanceStore";
+import moment from "moment";
 
 export default function AttendanceSummary() {
   const { attendances, meta, fetchAttendanceSummary } = useAttendanceStore();
   const [filterStatus, setFilterStatus] = useState<"all" | "late" | "ontime">("all");
   const [order, setOrder] = useState<"asc" | "desc">("desc");
   const [limit, setLimit] = useState(10);
-  const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [startDate, setStartDate] = useState(moment().startOf("month").format("YYYY-MM-DD"));
+  const [endDate, setEndDate] = useState(moment().endOf("month").format("YYYY-MM-DD"));
   const [page, setPage] = useState(1);
 
   useEffect(() => {
@@ -24,8 +25,8 @@ export default function AttendanceSummary() {
   const handleReset = () => {
     setPage(1);
     setFilterStatus("all");
-    setStartDate("");
-    setEndDate("");
+    setStartDate(moment().startOf("month").format("YYYY-MM-DD"));
+    setEndDate(moment().endOf("month").format("YYYY-MM-DD"));
     setOrder("desc");
     setLimit(10);
   };
