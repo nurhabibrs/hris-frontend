@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom"
-
+import { useAuthStore } from "../store/authStore"
 import LoginPage from "../pages/LoginPage"
 import DashboardPage from "../pages/DashboardPage"
-import { useAuthStore } from "../store/authStore"
+import ProfileSettingPage from "../pages/ProfileSettingPage"
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const token = useAuthStore((state) => state.token)
@@ -24,6 +24,14 @@ export default function AppRouter() {
           element={
             <ProtectedRoute>
               <DashboardPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <ProfileSettingPage />
             </ProtectedRoute>
           }
         />

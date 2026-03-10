@@ -30,10 +30,9 @@ const Navbar = ({ tabs, activeTab, onTabChange }: NavbarProps) => {
 
   const handleSetting = () => {
     setShowDropdown(false);
-    navigate("/settings");
+    navigate("/profile");
   };
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -72,12 +71,15 @@ const Navbar = ({ tabs, activeTab, onTabChange }: NavbarProps) => {
               onClick={() => setShowDropdown((prev) => !prev)}
               className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-red-600 text-white font-semibold flex items-center justify-center hover:bg-red-700 transition-colors relative flex-shrink-0"
             >
-              <span className="text-sm sm:text-base">{userInitials}</span>
+              {user?.photo_url ? (
+                <img src={user.photo_url} alt="Avatar" className="w-full h-full rounded-full object-cover" />
+              ) : (
+                <span className="text-sm sm:text-base">{userInitials}</span>
+              )}
             </button>
 
             {showDropdown && (
               <div className="absolute right-0 top-full mt-2 w-48 bg-white rounded-lg shadow-lg border border-slate-200 py-2 z-50">
-                {/* Mobile: Show user info in dropdown */}
                 <div className="md:hidden px-4 py-3 border-b border-slate-200">
                   <p className="text-sm font-semibold text-slate-900 truncate">{user?.name ?? "User"}</p>
                   <p className="text-xs text-slate-500 truncate">{user?.email ?? ""}</p>
@@ -109,7 +111,6 @@ const Navbar = ({ tabs, activeTab, onTabChange }: NavbarProps) => {
         </div>
       </div>
 
-      {/* Tab Bar */}
       {tabs && tabs.length > 0 && (
         <div className="border-t border-slate-100">
           <div className="max-w-7xl mx-auto px-3 sm:px-4">

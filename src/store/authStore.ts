@@ -4,7 +4,9 @@ import api from '../api/axios'
 interface User {
   userId: string
   email: string
+  photo_url?: string
   name?: string
+  role?: string;
 }
 
 interface AuthState {
@@ -21,6 +23,8 @@ function decodeToken(token: string): User | null {
       userId: payload.sub ?? payload.userId,
       email: payload.email,
       name: payload.name,
+      photo_url: payload.photo_url,
+      role: payload.role,
     }
   } catch {
     return null
