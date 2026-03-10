@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { useAttendanceStore } from "../store/attendanceStore";
 
-export default function Summary() {
-  const { attendances, meta, fetchSummary } = useAttendanceStore();
+export default function AttendanceSummary() {
+  const { attendances, meta, fetchAttendanceSummary } = useAttendanceStore();
   const [filterStatus, setFilterStatus] = useState<"all" | "late" | "ontime">("all");
   const [order, setOrder] = useState<"asc" | "desc">("desc");
   const [limit, setLimit] = useState(10);
@@ -18,8 +18,8 @@ export default function Summary() {
     else if (filterStatus === "ontime") filters.isLate = false
     if (order) filters.order = order
     if (limit) filters.limit = limit
-    fetchSummary(filters);
-  }, [fetchSummary, startDate, endDate, filterStatus, order, limit, page]);
+    fetchAttendanceSummary(filters);
+  }, [fetchAttendanceSummary, startDate, endDate, filterStatus, order, limit, page]);
 
   const handleReset = () => {
     setPage(1);

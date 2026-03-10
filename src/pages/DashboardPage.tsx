@@ -2,7 +2,7 @@ import { useState } from "react";
 import Navbar from "../components/Navbar";
 import Dashboard from "../components/Dashboard";
 import Attendance from "../components/Attendance";
-import Summary from "../components/Summary";
+import AttendanceSummary from "../components/AttendanceSummary";
 
 const TABS = [
   { id: "dashboard", label: "Beranda" },
@@ -20,7 +20,7 @@ export default function DashboardPage() {
         <div className="max-w-7xl mx-auto px-3 sm:px-4 py-6">
           {activeTab === "dashboard" && <Dashboard />}
           {activeTab === "attendance" && <Attendance />}
-          {activeTab === "summary" && <Summary />}
+          {activeTab === "summary" && <AttendanceSummary />}
         </div>
       </div>
     </>

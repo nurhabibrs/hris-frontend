@@ -115,4 +115,4 @@ npm run lint
 State is managed with **Zustand**:
 
 - **`useAuthStore`** — holds `user`, `token`, and actions: `login`, `logout`, `updateUser`, `initUser`.
-- **`useAttendanceStore`** — holds `attendances`, `meta`, and `fetchSummary(filters?)` which fetches paginated attendance records from `GET /attendances/:userId`.
+- **`useAttendanceStore`** — holds `attendances`, `meta`, and `fetchAttendanceSummary(filters?)` which fetches paginated attendance records from `GET /attendances/:userId`.

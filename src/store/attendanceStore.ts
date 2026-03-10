@@ -21,14 +21,14 @@ interface AttendanceMeta {
 interface AttendanceState {
     attendances: Record<string, unknown>[]
     meta: AttendanceMeta | null
-    fetchSummary: (filters?: AttendanceFilters) => Promise<void>
+    fetchAttendanceSummary: (filters?: AttendanceFilters) => Promise<void>
 }
 
 export const useAttendanceStore = create<AttendanceState>((set) => ({
     attendances: [],
     meta: null,
 
-    fetchSummary: async (filters) => {
+    fetchAttendanceSummary: async (filters) => {
         const userId = useAuthStore.getState().user?.userId
         if (!userId) return
 
