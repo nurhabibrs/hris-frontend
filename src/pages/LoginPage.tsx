@@ -1,20 +1,7 @@
-import { useState, useEffect, useCallback } from "react"
+import { useState, useCallback } from "react"
 import { useNavigate } from "react-router-dom"
 import { useAuthStore } from "../store/authStore"
-
-function Snackbar({ message, onClose }: { message: string; onClose: () => void }) {
-  useEffect(() => {
-    const timer = setTimeout(onClose, 3000);
-    return () => clearTimeout(timer);
-  }, [message, onClose]);
-
-  return (
-    <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg text-sm text-white bg-red-600">
-      <span>{message}</span>
-      <button onClick={onClose} className="opacity-70 hover:opacity-100 text-lg leading-none">&times;</button>
-    </div>
-  );
-}
+import Snackbar from "../components/Snackbar"
 
 export default function LoginPage() {
   const login = useAuthStore((state) => state.login)
@@ -39,7 +26,7 @@ export default function LoginPage() {
 
   return (
     <div className="flex items-center justify-center h-screen">
-        {error && <Snackbar message={error} onClose={closeSnackbar} />}
+        {error && <Snackbar message={error} type="error" onClose={closeSnackbar} />}
         <div className="w-full max-w-md">
             <div className="text-center mb-8">
                 <div className="inline-flex items-center justify-center w-14 h-14 bg-amber-200 rounded-xl mb-4">

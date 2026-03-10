@@ -3,14 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { useAuthStore } from "../store/authStore";
 import api from "../api/axios";
-
-interface UserProfile {
-  position?: string;
-  phone_number?: string;
-  photo_url?: string;
-  name: string;
-  email: string;
-}
+import type { User } from "../interface/User";
 
 interface EditFormData {
   phone_number: string;
@@ -32,7 +25,7 @@ export default function ProfileSettingPage() {
   const [isEditMode, setIsEditMode] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [userProfile, setUserProfile] = useState<User | null>(null);
   const [photoFile, setPhotoFile] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [formData, setFormData] = useState<EditFormData>({ phone_number: "", new_password: "", confirm_password: "" });
@@ -61,6 +54,7 @@ export default function ProfileSettingPage() {
       };
       setUserProfile(profile);
       setFormData((f) => ({ ...f, phone_number: profile?.phone_number ?? "" }));
+      useAuthStore.getState().updateUser({ photo_url: data.photo_url, name: data.name });
     } catch {
       // ignore
     } finally {
@@ -89,6 +83,12 @@ export default function ProfileSettingPage() {
     }
     if (formData.confirm_password && !formData.new_password) {
       errors.new_password = "Please enter a new password";
+    }
+    if (formData.phone_number && !/^\+?\d{7,15}$/.test(formData.phone_number)) {
+      errors.phone_number = "Invalid phone number format";
+    }
+    if (formData.phone_number && formData.phone_number.length < 8) {
+      errors.phone_number = "Phone number must be at least 8 characters";
     }
     setValidateMessage(errors);
     return Object.keys(errors).length === 0;

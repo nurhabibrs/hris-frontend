@@ -1,29 +1,23 @@
 import { create} from 'zustand'
 import api from '../api/axios'
-
-interface User {
-  userId: string
-  email: string
-  photo_url?: string
-  name?: string
-  role?: string;
-}
+import type { User } from '../interface/User'
 
 interface AuthState {
   user: User | null
   token: string | null
   login: (email: string, password: string) => Promise<void>
   logout: () => void
+  updateUser: (partial: Partial<User>) => void
+  initUser: () => Promise<void>
 }
 
 function decodeToken(token: string): User | null {
   try {
     const payload = JSON.parse(atob(token.split('.')[1]))
     return {
-      userId: payload.sub ?? payload.userId,
+      userId: payload.userId,
       email: payload.email,
       name: payload.name,
-      photo_url: payload.photo_url,
       role: payload.role,
     }
   } catch {
@@ -50,6 +44,8 @@ export const useAuthStore = create<AuthState>((set) => ({
       token,
       user: decodeToken(token),
     })
+
+    await useAuthStore.getState().initUser()
   },
 
   logout: async () => {
@@ -61,5 +57,25 @@ export const useAuthStore = create<AuthState>((set) => ({
       user: null,
       token: null,
     })
+  },
+
+  updateUser: (partial) => {
+    set((state) => ({
+      user: state.user ? { ...state.user, ...partial } : state.user,
+    }))
+  },
+
+  initUser: async () => {
+    const userId = useAuthStore.getState().user?.userId
+    if (!userId) return
+    try {
+      const res = await api.get(`/users/${userId}`)
+      const data = res.data.data
+      set((state) => ({
+        user: state.user ? { ...state.user, name: data.name, photo_url: data.photo_url } : state.user,
+      }))
+    } catch {
+      console.log("Failed to fetch user profile, keeping existing token data if any")
+    }
   },
 }))
