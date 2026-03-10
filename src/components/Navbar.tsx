@@ -13,7 +13,7 @@ type NavbarProps = {
   onTabChange?: (id: string) => void;
 };
 
-const Navbar = ({ tabs, activeTab, onTabChange }: NavbarProps) => {
+export default function Navbar({ tabs, activeTab, onTabChange }: NavbarProps) {
   const navigate = useNavigate();
   const user = useAuthStore((state) => state.user);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -134,5 +134,3 @@ const Navbar = ({ tabs, activeTab, onTabChange }: NavbarProps) => {
     </nav>
   );
 };
-
-export default Navbar;

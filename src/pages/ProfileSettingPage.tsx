@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import { useAuthStore } from "../store/authStore";
 import api from "../api/axios";
-import type { User } from "../interface/User";
+import type { User } from "../interface/UserInterface";
 import Snackbar from "../components/Snackbar";
 
 interface EditFormData {

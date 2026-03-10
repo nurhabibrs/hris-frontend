@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import api from '../api/axios'
-import type { User } from '../interface/User'
+import type { User } from '../interface/UserInterface'
 
 interface AuthState {
     user: User | null
