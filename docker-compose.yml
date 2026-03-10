@@ -1,0 +1,16 @@
+services:
+  hris-frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL}
+        VITE_APP_NAME: ${VITE_APP_NAME}
+        VITE_PORT: ${VITE_PORT:-3000}
+    image: hris-frontend:latest
+    container_name: hris-frontend
+    restart: unless-stopped
+    ports:
+      - "${VITE_PORT:-3000}:80"
+    env_file:
+      - .env
