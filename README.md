@@ -14,17 +14,21 @@ A Human Resource Information System (HRIS) frontend built with **React 19**, **T
 | [React Router v7](https://reactrouter.com/) | Client-side routing |
 | [Zustand](https://zustand-demo.pmnd.rs/) | Global state management |
 | [Axios](https://axios-http.com/) | HTTP client |
+| [Moment.js](https://momentjs.com/) | Date formatting & manipulation |
 | [Tailwind CSS](https://tailwindcss.com/) | Utility-first styling |
 
 ---
 
 ## Features
 
-- **Authentication** — JWT-based login/logout with token stored in `localStorage`. Token payload is decoded client-side to hydrate the user session.
+- **Authentication** — JWT-based login/logout with token stored in `localStorage`. Expired tokens are detected and removed on app startup.
 - **Protected & Public Routes** — Route guards redirect unauthenticated users to `/login` and authenticated users away from the login page.
-- **Dashboard** — Displays attendance records with filtering support (date range, late flag, pagination, sort order).
-- **Profile Settings** — Users can view and update their profile information.
-- **Snackbar Notifications** — Global notification component for user feedback.
+- **Dashboard** — Tabbed layout with three views: a welcome home screen, check-in/check-out actions, and a paginated attendance summary.
+- **Check-in / Check-out** — Employees can record their daily arrival and departure via dedicated API calls.
+- **Attendance Summary** — Filterable and paginated attendance records with date range, late/on-time status, sort order, and page size controls.
+- **Profile Settings** — Users can view and update their phone number, password, and profile photo.
+- **Snackbar Notifications** — Global notification component for success and error feedback.
+- **Auto-logout on 401** — Axios response interceptor clears the session and redirects to `/login` on any `401 Unauthorized` response.
 
 ---
 
@@ -33,21 +37,24 @@ A Human Resource Information System (HRIS) frontend built with **React 19**, **T
 ```
 src/
 ├── api/
-│   └── axios.ts          # Axios instance with Bearer token interceptor
+│   └── axios.ts              # Axios instance with Bearer token & 401 interceptors
 ├── components/
-│   ├── Navbar.tsx
-│   └── Snackbar.tsx
+│   ├── Attendance.tsx         # Check-in / Check-out buttons
+│   ├── AttendanceSummary.tsx  # Filterable, paginated attendance table
+│   ├── Dashboard.tsx          # Welcome home screen
+│   ├── Navbar.tsx             # Top navigation bar with tab support
+│   └── Snackbar.tsx           # Toast notification component
 ├── interface/
-│   └── User.tsx          # User type definition
+│   └── UserInterface.ts       # User type definition
 ├── pages/
 │   ├── LoginPage.tsx
-│   ├── DashboardPage.tsx
+│   ├── DashboardPage.tsx      # Tabbed page: Dashboard / Attendance / Summary
 │   └── ProfileSettingPage.tsx
 ├── routes/
-│   └── AppRouter.tsx     # Route definitions with ProtectedRoute & PublicRoute
+│   └── AppRouter.tsx          # Route definitions with ProtectedRoute & PublicRoute
 ├── store/
-│   ├── authStore.ts      # Auth state (login, logout, initUser)
-│   └── attendanceStore.ts # Attendance state with filter support
+│   ├── authStore.ts           # Auth state (login, logout, initUser, token expiry check)
+│   └── attendanceStore.ts     # Attendance state with filter support
 ├── App.tsx
 └── main.tsx
 ```
@@ -165,11 +172,13 @@ VITE_API_URL=http://hris-backend:8000
 
 ## Authentication Flow
 
-1. User submits credentials on `/login`.
-2. `authStore.login()` calls `POST /auth/login` and stores the returned JWT in `localStorage`.
-3. The token payload is decoded to populate the `user` state.
-4. On app mount, `initUser()` fetches the latest profile data from `GET /users/:id`.
-5. `logout()` calls `POST /auth/logout`, clears `localStorage`, and resets the store.
+1. On app load, any expired JWT already in `localStorage` is detected via `isTokenExpired()` and removed before the store initialises.
+2. User submits credentials on `/login`.
+3. `authStore.login()` calls `POST /auth/login` and stores the returned JWT in `localStorage`.
+4. The token payload is decoded to populate the `user` state (`userId`, `email`, `name`, `role`).
+5. After login, `initUser()` calls `GET /users/:id` and refreshes `name` and `photo_url` in the store.
+6. If any API request returns `401 Unauthorized`, the Axios interceptor automatically clears `localStorage` and redirects to `/login`.
+7. `logout()` calls `POST /auth/logout`, clears `localStorage`, and resets the store.
 
 ---
 
@@ -177,5 +186,5 @@ VITE_API_URL=http://hris-backend:8000
 
 State is managed with **Zustand**:
 
-- **`useAuthStore`** — holds `user`, `token`, and actions: `login`, `logout`, `updateUser`, `initUser`.
-- **`useAttendanceStore`** — holds `attendances`, `meta`, and `fetchAttendanceSummary(filters?)` which fetches paginated attendance records from `GET /attendances/:userId`.
+- **`useAuthStore`** — holds `user`, `token`, and actions: `login`, `logout`, `updateUser`, `initUser`. Checks token expiry at module load time and discards stale tokens.
+- **`useAttendanceStore`** — holds `attendances`, `meta`, and `fetchAttendanceSummary(filters?)` which fetches paginated attendance records from `GET /attendances/:userId`. Supported filters: `startDate`, `endDate`, `isLate`, `page`, `limit`, `order`.
