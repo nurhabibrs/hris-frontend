@@ -100,6 +100,69 @@ npm run lint
 
 ---
 
+## Running with Docker
+
+### Prerequisites
+
+- [Docker](https://docs.docker.com/get-docker/) >= 24
+- [Docker Compose](https://docs.docker.com/compose/) v2
+
+### Setup
+
+```bash
+# 1. Copy the Docker environment template
+cp .env.docker.example .env
+
+# 2. Edit .env and set the correct values
+#    Most importantly: VITE_API_URL must point to your backend
+nano .env
+```
+
+### Build & Run
+
+```bash
+# Build the image and start the container in the background
+docker compose up --build -d
+
+# The app will be available at http://localhost:3000
+# (or whatever VITE_PORT is set to in your .env)
+```
+
+### Useful Commands
+
+```bash
+# View running containers
+docker compose ps
+
+# Stream logs
+docker compose logs -f
+
+# Stop and remove the container
+docker compose down
+
+# Rebuild after code or env changes
+docker compose up --build -d
+```
+
+### Environment Variables (Docker)
+
+> **Important:** `VITE_*` variables are baked into the JavaScript bundle at **build time**. You must rebuild the Docker image (`docker compose up --build`) whenever they change.
+
+| Variable | Description | Default |
+|---|---|---|
+| `NODE_ENV` | Node environment | `production` |
+| `VITE_PORT` | Host port mapped to the container | `3000` |
+| `VITE_API_URL` | Backend API base URL (browser-facing) | `http://localhost:8000` |
+| `VITE_APP_NAME` | Application display name | `HRIS Company` |
+
+When the backend runs in the **same Docker network**, use the service name instead of `localhost`:
+
+```env
+VITE_API_URL=http://hris-backend:8000
+```
+
+---
+
 ## Authentication Flow
 
 1. User submits credentials on `/login`.

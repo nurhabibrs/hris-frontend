@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Environment files (use .env.docker.example as template)
+.env
+.env.*
+!.env.docker.example
+
+# Version control
+.git/
+.gitignore
+
+# Editor/OS
+.DS_Store
+*.swp
+*.swo
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Test & lint
+coverage/
