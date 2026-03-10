@@ -1,73 +1,118 @@
-# React + TypeScript + Vite
+# HRIS Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A Human Resource Information System (HRIS) frontend built with **React 19**, **TypeScript**, and **Vite**. It provides authentication, an attendance dashboard, and profile management for employees.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Tech Stack
 
-## React Compiler
+| Technology | Purpose |
+|---|---|
+| [React 19](https://react.dev/) | UI library |
+| [TypeScript](https://www.typescriptlang.org/) | Type safety |
+| [Vite](https://vite.dev/) | Build tool & dev server |
+| [React Router v7](https://reactrouter.com/) | Client-side routing |
+| [Zustand](https://zustand-demo.pmnd.rs/) | Global state management |
+| [Axios](https://axios-http.com/) | HTTP client |
+| [Tailwind CSS](https://tailwindcss.com/) | Utility-first styling |
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Authentication** — JWT-based login/logout with token stored in `localStorage`. Token payload is decoded client-side to hydrate the user session.
+- **Protected & Public Routes** — Route guards redirect unauthenticated users to `/login` and authenticated users away from the login page.
+- **Dashboard** — Displays attendance records with filtering support (date range, late flag, pagination, sort order).
+- **Profile Settings** — Users can view and update their profile information.
+- **Snackbar Notifications** — Global notification component for user feedback.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Project Structure
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```
+src/
+├── api/
+│   └── axios.ts          # Axios instance with Bearer token interceptor
+├── components/
+│   ├── Navbar.tsx
+│   └── Snackbar.tsx
+├── interface/
+│   └── User.tsx          # User type definition
+├── pages/
+│   ├── LoginPage.tsx
+│   ├── DashboardPage.tsx
+│   └── ProfileSettingPage.tsx
+├── routes/
+│   └── AppRouter.tsx     # Route definitions with ProtectedRoute & PublicRoute
+├── store/
+│   ├── authStore.ts      # Auth state (login, logout, initUser)
+│   └── attendanceStore.ts # Attendance state with filter support
+├── App.tsx
+└── main.tsx
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## Getting Started
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### Prerequisites
+
+- Node.js >= 18
+- npm or yarn
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/nurhabibrs/hris-frontend.git
+cd hris-frontend
+
+# Install dependencies
+npm install
 ```
+
+### Environment Variables
+
+Create a `.env` file in the project root:
+
+```env
+VITE_API_URL=http://localhost:3000
+```
+
+`VITE_API_URL` is the base URL of the HRIS backend API. All requests made through the Axios instance will use this as their base.
+
+### Running the App
+
+```bash
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+
+# Lint
+npm run lint
+```
+
+---
+
+## Authentication Flow
+
+1. User submits credentials on `/login`.
+2. `authStore.login()` calls `POST /auth/login` and stores the returned JWT in `localStorage`.
+3. The token payload is decoded to populate the `user` state.
+4. On app mount, `initUser()` fetches the latest profile data from `GET /users/:id`.
+5. `logout()` calls `POST /auth/logout`, clears `localStorage`, and resets the store.
+
+---
+
+## State Management
+
+State is managed with **Zustand**:
+
+- **`useAuthStore`** — holds `user`, `token`, and actions: `login`, `logout`, `updateUser`, `initUser`.
+- **`useAttendanceStore`** — holds `attendances`, `meta`, and `fetchSummary(filters?)` which fetches paginated attendance records from `GET /attendances/:userId`.
