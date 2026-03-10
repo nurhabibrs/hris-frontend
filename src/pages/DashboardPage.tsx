@@ -216,8 +216,8 @@ function SummaryTab() {
             >
               &laquo;
             </button>
-            {Array.from({ length: meta.totalPages }, (_, i) => i + 1)
-              .filter((p) => p === 1 || p === meta.totalPages || Math.abs(p - page) <= 1)
+            {Array.from({ length: meta.total_pages }, (_, i) => i + 1)
+              .filter((p) => p === 1 || p === meta.total_pages || Math.abs(p - page) <= 1)
               .reduce<(number | "...")[]>((acc, p, idx, arr) => {
                 if (idx > 0 && (p as number) - (arr[idx - 1] as number) > 1) acc.push("...");
                 acc.push(p);
@@ -241,8 +241,8 @@ function SummaryTab() {
                 )
               )}
             <button
-              onClick={() => setPage((p) => Math.min(meta.totalPages, p + 1))}
-              disabled={page === meta.totalPages}
+              onClick={() => setPage((p) => Math.min(meta.total_pages, p + 1))}
+              disabled={page === meta.total_pages}
               className="px-3 py-1.5 text-sm rounded-lg border border-slate-200 text-slate-600 hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
             >
               &raquo;
