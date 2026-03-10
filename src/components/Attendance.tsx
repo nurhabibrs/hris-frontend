@@ -9,9 +9,9 @@ export default function Attendance() {
   const checkIn = async () => {
     try {
       await api.post("/attendances/check-in");
-      setSnackbar({ message: "Check in berhasil!", type: "success" });
-    } catch (err: unknown) {
-      const message = (err as { response?: { data?: { message?: string } } })?.response?.data?.message ?? "Gagal check in";
+      setSnackbar({ message: "Presensi datang berhasil!", type: "success" });
+    } catch (error) {
+      const message = (error as { response?: { data?: { message?: string } } })?.response?.data?.message ?? "Gagal presensi kedatangan";
       setSnackbar({ message, type: "error" });
     }
   };
@@ -19,9 +19,9 @@ export default function Attendance() {
   const checkOut = async () => {
     try {
       await api.post("/attendances/check-out");
-      setSnackbar({ message: "Check out berhasil!", type: "success" });
-    } catch (err: unknown) {
-      const message = (err as { response?: { data?: { message?: string } } })?.response?.data?.message ?? "Gagal check out";
+      setSnackbar({ message: "Presensi pulang berhasil!", type: "success" });
+    } catch (error) {
+      const message = (error as { response?: { data?: { message?: string } } })?.response?.data?.message ?? "Gagal presensi pulang";
       setSnackbar({ message, type: "error" });
     }
   };
@@ -35,13 +35,13 @@ export default function Attendance() {
           onClick={checkIn}
           className="w-full sm:w-auto px-6 py-3 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition-colors"
         >
-          Datang
+          Presensi Datang
         </button>
         <button
           onClick={checkOut}
           className="w-full sm:w-auto px-6 py-3 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors"
         >
-          Pulang
+          Presensi Pulang
         </button>
       </div>
     </div>

@@ -71,8 +71,8 @@ export default function AttendanceSummary() {
             onChange={(e) => { setOrder(e.target.value as "asc" | "desc"); setPage(1); }}
             className="col-span-1 sm:col-span-2 lg:col-span-1 text-sm border border-slate-200 rounded-lg px-3 py-2 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option value="desc">Terbaru</option>
-            <option value="asc">Terlama</option>
+            <option value="desc">Tanggal Terbaru</option>
+            <option value="asc">Tanggal Terlama</option>
           </select>
           {(filterStatus !== "all" || startDate || endDate) && (
             <button
