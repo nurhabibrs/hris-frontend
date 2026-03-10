@@ -72,13 +72,13 @@ function AttendanceTab() {
           onClick={checkIn}
           className="w-full sm:w-auto px-6 py-3 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition-colors"
         >
-          Check In
+          Datang
         </button>
         <button
           onClick={checkOut}
           className="w-full sm:w-auto px-6 py-3 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors"
         >
-          Check Out
+          Pulang
         </button>
       </div>
     </div>
@@ -192,11 +192,10 @@ function SummaryTab() {
                   <td className="px-6 py-4 text-slate-700">{String(item.checkIn ?? item.check_in ?? "-")}</td>
                   <td className="px-6 py-4 text-slate-700">{String(item.checkOut ?? item.check_out ?? "-")}</td>
                   <td className="px-6 py-4">
-                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                      item.isLate || item.is_late
+                    <span className={`px-2 py-1 rounded-full text-xs font-medium ${item.isLate || item.is_late
                         ? "bg-red-100 text-red-700"
                         : "bg-green-100 text-green-700"
-                    }`}>
+                      }`}>
                       {item.isLate || item.is_late ? "Terlambat" : "Tepat Waktu"}
                     </span>
                   </td>
@@ -246,11 +245,10 @@ function SummaryTab() {
                   <button
                     key={p}
                     onClick={() => setPage(p as number)}
-                    className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${
-                      p === page
+                    className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${p === page
                         ? "bg-blue-600 text-white border-blue-600"
                         : "border-slate-200 text-slate-600 hover:bg-slate-50"
-                    }`}
+                      }`}
                   >
                     {p}
                   </button>
