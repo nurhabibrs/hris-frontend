@@ -2,7 +2,7 @@ import { useEffect } from "react";
 
 type SnackbarType = "error" | "success";
 
-const Snackbar = ({ message, type, onClose }: { message: string; type: SnackbarType; onClose: () => void }) => {
+export default function Snackbar({ message, type, onClose }: { message: string; type: SnackbarType; onClose: () => void }) {
     useEffect(() => {
         const timer = setTimeout(onClose, 3000);
         return () => clearTimeout(timer);
@@ -16,5 +16,3 @@ const Snackbar = ({ message, type, onClose }: { message: string; type: SnackbarT
         </div>
     );
 }
-
-export default Snackbar;

@@ -1,4 +1,4 @@
-const Dashboard = () => {
+export default function Dashboard() {
   return (
     <div className="flex flex-col items-center justify-center py-16 text-slate-500">
       <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mb-4 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -9,5 +9,3 @@ const Dashboard = () => {
     </div>
   );
 }
-
-export default Dashboard;
