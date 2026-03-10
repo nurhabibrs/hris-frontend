@@ -119,11 +119,10 @@ const Navbar = ({ tabs, activeTab, onTabChange }: NavbarProps) => {
                 <button
                   key={tab.id}
                   onClick={() => onTabChange?.(tab.id)}
-                  className={`whitespace-nowrap px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${
-                    activeTab === tab.id
+                  className={`whitespace-nowrap px-4 py-2.5 text-sm font-medium border-b-2 transition-colors ${activeTab === tab.id
                       ? "border-red-600 text-red-600"
                       : "border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300"
-                  }`}
+                    }`}
                 >
                   {tab.label}
                 </button>

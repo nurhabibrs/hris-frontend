@@ -12,9 +12,8 @@ function Snackbar({ message, type, onClose }: { message: string; type: SnackbarT
   }, [message, onClose]);
 
   return (
-    <div className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg text-sm text-white transition-all ${
-      type === "error" ? "bg-red-600" : "bg-green-600"
-    }`}>
+    <div className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-4 py-3 rounded-lg shadow-lg text-sm text-white transition-all ${type === "error" ? "bg-red-600" : "bg-green-600"
+      }`}>
       <span>{message}</span>
       <button onClick={onClose} className="opacity-70 hover:opacity-100 text-lg leading-none">&times;</button>
     </div>
@@ -193,8 +192,8 @@ function SummaryTab() {
                   <td className="px-6 py-4 text-slate-700">{String(item.checkOut ?? item.check_out ?? "-")}</td>
                   <td className="px-6 py-4">
                     <span className={`px-2 py-1 rounded-full text-xs font-medium ${item.isLate || item.is_late
-                        ? "bg-red-100 text-red-700"
-                        : "bg-green-100 text-green-700"
+                      ? "bg-red-100 text-red-700"
+                      : "bg-green-100 text-green-700"
                       }`}>
                       {item.isLate || item.is_late ? "Terlambat" : "Tepat Waktu"}
                     </span>
@@ -246,8 +245,8 @@ function SummaryTab() {
                     key={p}
                     onClick={() => setPage(p as number)}
                     className={`px-3 py-1.5 text-sm rounded-lg border transition-colors ${p === page
-                        ? "bg-blue-600 text-white border-blue-600"
-                        : "border-slate-200 text-slate-600 hover:bg-slate-50"
+                      ? "bg-blue-600 text-white border-blue-600"
+                      : "border-slate-200 text-slate-600 hover:bg-slate-50"
                       }`}
                   >
                     {p}
