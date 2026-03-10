@@ -8,6 +8,7 @@ interface AttendanceFilters {
   isLate?: boolean
   page?: number
   limit?: number
+  order?: "asc" | "desc"
 }
 
 interface AttendanceMeta {
@@ -37,6 +38,7 @@ export const useAttendanceStore = create<AttendanceState>((set) => ({
     if (filters?.isLate !== undefined) params.isLate = String(filters.isLate)
     if (filters?.page) params.page = String(filters.page)
     if (filters?.limit) params.limit = String(filters.limit)
+    if (filters?.order) params.order = filters.order
 
     const res = await api.get(`/attendances/${userId}`, { params })
 

@@ -88,24 +88,27 @@ function AttendanceTab() {
 function SummaryTab() {
   const { attendances, meta, fetchSummary } = useAttendanceStore();
   const [filterStatus, setFilterStatus] = useState<"all" | "late" | "ontime">("all");
+  const [order, setOrder] = useState<"asc" | "desc">("desc");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
   const [page, setPage] = useState(1);
 
   useEffect(() => {
-    const filters: { startDate?: string; endDate?: string; isLate?: boolean; page: number } = { page }
+    const filters: { startDate?: string; endDate?: string; isLate?: boolean; page: number; order?: "asc" | "desc" } = { page }
     if (startDate) filters.startDate = startDate
     if (endDate) filters.endDate = endDate
     if (filterStatus === "late") filters.isLate = true
     else if (filterStatus === "ontime") filters.isLate = false
+    if (order) filters.order = order
     fetchSummary(filters);
-  }, [fetchSummary, startDate, endDate, filterStatus, page]);
+  }, [fetchSummary, startDate, endDate, filterStatus, order, page]);
 
   const handleReset = () => {
     setPage(1);
     setFilterStatus("all");
     setStartDate("");
     setEndDate("");
+    setOrder("desc");
   };
 
   const filtered = attendances;
@@ -143,6 +146,14 @@ function SummaryTab() {
             <option value="all">Semua Status</option>
             <option value="late">Terlambat</option>
             <option value="ontime">Tepat Waktu</option>
+          </select>
+          <select
+            value={order}
+            onChange={(e) => { setOrder(e.target.value as "asc" | "desc"); setPage(1); }}
+            className="col-span-1 sm:col-span-2 lg:col-span-1 text-sm border border-slate-200 rounded-lg px-3 py-2 text-slate-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option value="desc">Terbaru</option>
+            <option value="asc">Terlama</option>
           </select>
           {(filterStatus !== "all" || startDate || endDate) && (
             <button
